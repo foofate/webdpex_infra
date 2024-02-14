@@ -4,3 +4,7 @@ provider "yandex" {
   folder_id                = var.folder_id
   zone                     = var.zone
 }
+
+provider "local" {}
+
+provider "random" {}
