@@ -1,0 +1,44 @@
+nodeExporter:
+  serviceMonitor:
+    relabelings: [__meta_kubernetes_pod_node_name]
+    separator: ;
+    regex: ^(.*)$
+    targetLabel: nodename
+    replacement: $1
+    action: replace
+
+prometheus:
+  prometheusSpec:
+    retention: 31d
+    resoruces:
+      requests:
+        cpu: "0.5"
+        memory: 2Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: yc-network-hdd
+          resources:
+            requests:
+              storage: 4Gi
+
+grafana:
+  grafana.ini:
+    server:
+      root_url: http://grafana.webdpex
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+      disableDelete: false
+      allowUiUpdates: true
+  adminPassword: "webdpex"
+  persistence:
+    enabled: true
+    storageClassName: yc-network-hdd
+    accessModes: ["ReadWriteOnce"]
+    size: 4Gi
+
+kubeProxy:
+  enabled: false
